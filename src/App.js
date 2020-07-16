@@ -29,6 +29,9 @@ const theme = createTheme({
       dark: "#b22a00",
       contrastText: "#fff"
     }
+  },
+  typography: {
+    useNextVariants: true
   }
 })
 
