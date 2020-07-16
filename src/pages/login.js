@@ -8,6 +8,7 @@ import axios from 'axios'
 import {Link} from 'react-router-dom'
 
 
+
 // * styles
 
 import AppIcon from '../images/twitter.png'
@@ -26,34 +27,10 @@ import Button from '@material-ui/core/Button'
 // barra circular de progresso
 import CircularProgress from '@material-ui/core/CircularProgress'
 
-const styles = {
-    form: {
-        textAlign: 'center'
-    },
-    image:{
-        margin: "20px auto 20px auto"
-    },
-    pageTitle: {
-        margin: "10px auto 10px auto"
-    },
-    textField: {
-        margin: "10px auto 10px auto"
-    },
-    button: {
-        marginTop: 20,
-        position: 'relative',
-    },
-    customError: {
-        color: 'red',
-        fontSize: '0.8rem',
-        marginTop: 10
-    },
-    progress: {
-        position: 'absolute'
-    }
-
-}
-
+// pegar o theme global
+const styles = (theme) => (
+    {...theme.userStyles}
+)
 
 
 class login extends Component {
@@ -80,10 +57,12 @@ class login extends Component {
             email: this.state.email,
             password: this.state.password
         }
-
+        
         // fazer requisição para logar
         axios.post('/login', userData)
             .then( res => {
+ 
+                localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`)
                 this.setState({
                     loading: false
                 })
@@ -130,10 +109,11 @@ class login extends Component {
                         <TextField id="email" name="email" type="email" label="Email" className={classes.textField} value={this.state.email} onChange={this.handleChange} fullWidth helperText={errors.email} error={errors.email ? true : false}/> 
 
                         <TextField id="password" name="password" type="password" label="Password" className={classes.textField} value={this.state.password} onChange={this.handleChange} fullWidth helperText={errors.password} error={errors.password ? true : false} />   
-
+  
                         {/* errors.general vem da API, caso dê erro nas credenciais */}
                         {errors.general && 
                             <Typography variant="body2" className={classes.customError}>
+                                {errors.general}
                             </Typography>
                         }
                         

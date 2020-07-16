@@ -31,7 +31,7 @@ class Scream extends Component {
         
         dayjs.extend(relativeTime)
 
-        const {classes, scream: {body, createdAt, userImage, userHandle, screamId, likeCount, commenetCount}} = this.props
+        const {classes, scream: {body, createdAt, userImage, userHandle, screamId, likeCount, commentCount}} = this.props
 
         return (
             <Card className={classes.card}>
