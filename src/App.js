@@ -1,6 +1,7 @@
 // * libraries
 import React, { Component } from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
+import jwtDecode from 'jwt-decode' 
 
 // * styles
 import './App.css';
@@ -16,54 +17,26 @@ import signup from './pages/signup'
 
 // * components
 import Navbar from './components/Navbar'
+import AuthRoute from './utils/AuthRoute'
 
-// esses styles sereão global
-const theme = createTheme({
-  palette: {
-    primary: {
-      light: "#33c9dc",
-      main: "#00bcd4",
-      dark: "#008394",
-      contrastText: "#fff"
-    },
-    secondary: {
-      light: "#ff6333",
-      main: "#ff3d00",
-      dark: "#b22a00",
-      contrastText: "#fff"
-    }
-  },
-  typography: {
-    useNextVariants: true
-  },
-  userStyles: {
-    form: {
-      textAlign: 'center'
-    },
-    image:{
-        margin: "20px auto 20px auto"
-    },
-    pageTitle: {
-        margin: "10px auto 10px auto"
-    },
-    textField: {
-        margin: "10px auto 10px auto"
-    },
-    button: {
-        marginTop: 20,
-        position: 'relative',
-    },
-    customError: {
-        color: 'red',
-        fontSize: '0.8rem',
-        marginTop: 10
-    },
-    progress: {
-        position: 'absolute'
-    }
+import themeFile from './utils/theme'
+
+// esses styles serão global
+const theme = createTheme(themeFile)
+
+const token = localStorage.FBIdToken;
+let authenticated;
+if(token){
+  // extrair as informações do token e transformar em um objeto
+  const decodedToken = jwtDecode(token);
+
+  if(decodedToken.exp * 1000 < Date.now()){
+    window.location.href = '/login'
+    authenticated = false;
+  } else {
+    authenticated = true
   }
-  
-})
+}
 
 class App extends Component {
   render() {
@@ -75,9 +48,9 @@ class App extends Component {
             <div className="container">
 
             <Switch>
-              <Route exact path="/signup" component={signup} />
-              <Route exact path="/login" component={login} />
-              <Route exact path="/" component={home} />
+              <AuthRoute exact path="/signup" component={signup} authenticated={authenticated} />
+              <AuthRoute exact path="/login" component={login} authenticated={authenticated} />
+              <Route exact path="/" component={home}  />
             </Switch>
 
            </div>
