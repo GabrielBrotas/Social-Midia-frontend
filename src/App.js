@@ -1,19 +1,21 @@
+// * libraries
 import React, { Component } from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 
-// styles
+// * styles
 import './App.css';
+// MUI
+// Vai criar um tema personalizado para a aplicação
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
 import createTheme from '@material-ui/core/styles/createMuiTheme'
 
-// pages
+// * pages
 import home from './pages/home'
 import login from './pages/login'
 import signup from './pages/signup'
 
-// components
+// * components
 import Navbar from './components/Navbar'
-
 
 const theme = createTheme({
   palette: {
