@@ -72,23 +72,29 @@ const styles = (theme) => ({
 
 class Profile extends Component {
     
+  // Mudar foto do perfil
   handleImageChange = (event) => {
-    // pegar a imagem
+    // pegar a imagem, mesmo escolhendo apenas uma vai vim em um array entao vamos pegar a primeira
     const image = event.target.files[0]
-    // send to server
+
+    // criar um formData para mandar pro backend
     const formData = new FormData();
-    
+    // nesse form colocar um name, o arquivo e o blob name
     formData.append('image', image, image.name)
-    
+    // mandar para action do redux fazer o upload
     this.props.uploadImage(formData)
   }
 
+  // quando clicar no icone de editar
   handleEditPicture = () => {
+    // pegar o id do input onde escolher o arquivo
     const fileInput = document.getElementById('imageInput')
+    // e clicar
     fileInput.click()
   }
 
   render() {
+    // dados do user autenticado
       const {
         classes,
         user: {
@@ -97,36 +103,50 @@ class Profile extends Component {
           authenticated}
       } = this.props
 
+      // se nao estiver carregando os dados...
       let profileMarkup = !loading 
+        // verificar se esta autenticado
       ? (authenticated 
+          // se estiver...
           ? ( 
+            // colocar o profile em um content 'Papeer'
             <Paper className={classes.paper} > 
               <div className={classes.profile}>
 
+                {/* imagem do perfil content */}
                 <div className="image-wrapper">
-                    <img className="profile-image" src={imageUrl} alt="profile"></img>
 
-                    <input type="file" id="imageInput" onChange={this.handleImageChange} hidden="hidden"/>
+                  {/* imagem */}
+                  <img className="profile-image" src={imageUrl} alt="profile"></img>
 
-                    <Tooltip title="Edit profile picture" placement="top">
-                      <IconButton onClick={this.handleEditPicture} className="button">
-                        <EditIcon color="primary" />
-                      </IconButton>
-                    </Tooltip>
+                  {/* input para trocar de imagem */}
+                  <input type="file" id="imageInput" onChange={this.handleImageChange} hidden="hidden"/>
+
+                  {/* tooltip vai mostrar um nome(title) quando o mouse passar por cima do icone */}
+                  <Tooltip title="Edit profile picture" placement="top">
+                    {/* icone de editar  */}
+                    <IconButton onClick={this.handleEditPicture} className="button">
+                      <EditIcon color="primary" />
+                    </IconButton>
+                  </Tooltip>
 
                 </div>
                 <hr />
 
+                {/* detalhes do usuario */}
                 <div className="profile-details">
 
+                  {/* link para o perfil dele */}
                   <MuiLink component={Link} to={`/users/${handle}`} color="primary" variant="h5">
                       @{handle}
                   </MuiLink>
                   <hr/>
 
+                  {/* bio... */}
                   {bio && <Typography variant="body2">{bio}</Typography>}
                   <hr/>
 
+                  {/* localização... */}
                   {location && (
                       <Fragment>
                           <LocationOn color="primary" /> <span>{location}</span>
@@ -134,6 +154,7 @@ class Profile extends Component {
                       </Fragment>
                   )}
 
+                  {/* url do site.. */}
                   {website && (
                       <Fragment>
                           <LinkIcon color="primary" />
@@ -144,27 +165,32 @@ class Profile extends Component {
                       </Fragment>
                   )}
 
+                  {/* dia em que criou o perfil */}
                   <CalendarToday color="primary"/> {" "} <span> Joined {dayjs(createdAt).format('MMM YYYY')}</span>
                     
                 </div>
               </div>
             </Paper>
           ) : (
-              <Paper className={classes.paper}>
+            // se nao esetiver autenticado...
+            <Paper className={classes.paper}>
 
-                <Typography variant="body2" align="center">
-                No profile found, please login again
-                </Typography>
+              {/* texto.. */}
+              <Typography variant="body2" align="center">
+              No profile found, please login again
+              </Typography>
 
-                <div className={classes.buttons}>
-                    <Button variant="contained" color="primary" component={Link} to="/login">Login
-                    </Button>
-                    <Button variant="contained" color="secondary" component={Link} to="/sign up">Sign up
-                    </Button>
-                </div>
+              {/* butao para logar ou se registrar */}
+              <div className={classes.buttons}>
+                  <Button variant="contained" color="primary" component={Link} to="/login">Login
+                  </Button>
+                  <Button variant="contained" color="secondary" component={Link} to="/sign up">Sign up
+                  </Button>
+              </div>
 
-              </Paper>
-          )) 
+            </Paper>
+          ))
+          // carregando... 
       : (<p>loading...</p>)
 
       return profileMarkup
@@ -172,12 +198,10 @@ class Profile extends Component {
 }
 
 Profile.protoTypes = {
-    // user data
-    user: PropTypes.object.isRequired,
-    // styles
-    classes: PropTypes.object.isRequired,
-    logoutUser: PropTypes.func.isRequired,
-    uploadImage: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired, // user data
+    classes: PropTypes.object.isRequired, // styles
+    logoutUser: PropTypes.func.isRequired, // function to logout usere
+    uploadImage: PropTypes.func.isRequired, // function to upload new profile imagee
 }
 
 const mapStateToProps = (state) => ({
