@@ -2,13 +2,13 @@ import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import withStyles from '@material-ui/core/styles/withStyles'
 
+import MyButton from '../utils/MyButton'
+
 // redux
 import {connect} from 'react-redux'
 import {editUserDetails} from '../redux/actions/userActions'
 
 // Material UI Stuffs
-import Tooltip from '@material-ui/core/Tooltip'
-import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
@@ -89,11 +89,9 @@ class EditDetails extends Component {
         return (
             <Fragment>
                 {/* butao para abrir o pop up */}
-                <Tooltip title="Edit Details" placement="top">
-                    <IconButton onClick={this.handleOpen} className={classes.button}>
-                        <EditIcon color="primary"/>
-                    </IconButton>
-                </Tooltip>
+                <MyButton tip="Edit Details" btnClassName={classes.button} onClick={this.handleOpen}>
+                    <EditIcon color="primary"/>
+                </MyButton>
 
                 {/* caixa do pop up */}
                 <Dialog 

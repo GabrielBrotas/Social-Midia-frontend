@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {GET_SCREAMS_SUCCESS, GET_SCREAMS_ERROR, GET_SCREAMS_LOADING} from '../types'
+import {GET_SCREAMS_SUCCESS, GET_SCREAMS_ERROR, GET_SCREAMS_LOADING, LIKE_SCREAM, UNLIKE_SCREAM, SET_SCREAMS} from '../types'
 
 
 export const getScreams = () => (dispatch) => {
@@ -14,6 +14,9 @@ export const getScreams = () => (dispatch) => {
         dispatch({type: GET_SCREAMS_ERROR})
     })
 
-
 }
+
+// like a scream
+
+// unlike scream
 
