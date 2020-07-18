@@ -11,6 +11,8 @@ import {getScreams} from '../redux/actions/dataActions'
 // * components
 // componente da scream
 import Scream from '../components/Scream'
+import Profile from '../components/Profile'
+
 
 function Home(props) {
 
@@ -40,7 +42,7 @@ function Home(props) {
 
             {/* coluna do perfil do usuario */}
             <Grid item sm={4} xs={12}>
-                <p>Profile...</p>
+                <Profile />
             </Grid>
             
         </Grid>
