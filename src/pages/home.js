@@ -19,17 +19,23 @@ function Home(props) {
     const screamsList = useSelector( state => state.data)
     const {loading, screams, error} = screamsList
 
+    const [recentScreamsMarkup, setRecentScreamsMarkup] = useState(null)
     const dispatch = useDispatch()
 
     useEffect( () => {
         dispatch(getScreams())
     }, [dispatch])
 
-
+    useEffect( () => {
+        screams && 
+        setRecentScreamsMarkup(
+            screams.map( (scream) => (
+                <Scream key={scream.screamId} scream={scream}  />
+            )))
+             
+    }, [screams])
     // colocar todas as screams, quando forem carregadas, no formato padrao do component 'Scream'
-    let recentScreamsMarkup = screams 
-    ? screams.map( (scream) => <Scream key={scream.screamId} scream={scream} />) 
-    :  <p>Loading..</p> 
+ 
     
     return (
         // display grid que vai ser o container (pai) e dentro vai ter a quantidade de grids(colunas) que quere com a largura que cada um vai ocupar
@@ -37,7 +43,9 @@ function Home(props) {
             
             {/* coluna das screams */}
             <Grid item sm={8} xs={12}>
-                {recentScreamsMarkup}
+                {recentScreamsMarkup 
+                ? recentScreamsMarkup 
+                : <p>Loading...</p>}
             </Grid>
 
             {/* coluna do perfil do usuario */}

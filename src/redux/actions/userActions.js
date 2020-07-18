@@ -55,6 +55,15 @@ export const logoutUser = () => (dispatch) => {
     
 }
 
+export const uploadImage = (formData) => (dispatch) => {
+    dispatch({type: LOADING_USER});
+    axios.post('/user/image', formData)
+        .then( () => {
+            dispatch(getUserData())
+        })
+        .catch(err => console.log(err))
+}
+
 const setAuthorizationHeader = (token) => {
 
         const FBIdToken = `Bearer ${token}`
@@ -71,11 +80,10 @@ export const getUserData = () => (dispatch) => {
 
     axios.get('/user')
         .then( res => {
-            console.log('seending' + res)
             dispatch({type: SET_USER, payload: res.data})
         })
         .catch( err => {
-            console.log('bad')
             console.log(err)
         })
 }
+
