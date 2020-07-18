@@ -1,21 +1,15 @@
-import {SET_ERRORS, SET_USER, CLEAR_ERRORS, LOADING_UI, SET_AUTHENTICATED, SET_UNAUTHENTICATED} from '../types'
+import {SET_ERRORS, SET_USER, CLEAR_ERRORS, LOADING_UI, SET_UNAUTHENTICATED} from '../types'
 import axios from 'axios'
 
 export const loginUser = (userData, history) => (dispatch) => {
 
     // mandar actions para dizer que está carregando a pagina
     dispatch({type: LOADING_UI});
-
+    
     // fazer requisição para logar o user
     axios.post('/login', userData)
     .then( res => {
-
-        const FBIdToken = `Bearer ${res.data.token}`
-
-        localStorage.setItem('FBIdToken', `Bearer ${FBIdToken}`)
-        
-        // sempre que fizer uma requisição via axios vai ter essa header com o token do usuario
-        axios.defaults.headers.common['Authorization'] = FBIdToken 
+        setAuthorizationHeader(res.data.token)
         dispatch(getUserData());
         dispatch({type: CLEAR_ERRORS})
         history.push('/')
@@ -28,11 +22,58 @@ export const loginUser = (userData, history) => (dispatch) => {
     })
 }
 
+export const signupUser = (newUserData, history) => (dispatch) => {
+
+    // mandar actions para dizer que está carregando a pagina
+    dispatch({type: LOADING_UI});
+
+    // fazer requisição para logar o user
+    axios.post('/signup', newUserData)
+    .then( res => {
+        setAuthorizationHeader(res.data.token)
+        dispatch(getUserData());
+        dispatch({type: CLEAR_ERRORS})
+        history.push('/')
+    })
+    .catch( err => {
+        dispatch({
+            type: SET_ERRORS,
+            payload: err.response.data
+        })
+    })
+}
+
+export const logoutUser = () => (dispatch) => {
+    // remover o local Storage com os dados do user
+    localStorage.removeItem('FBIdToken');
+    
+    // remover do header do axios a autorização que um usuario logado tinha para as rotas
+    delete axios.defaults.headers.common['Authorization'];
+
+    // limpar os dados do user (credenciais, likes, notifications, authenticated) no store do axios e colocar no initialState.
+    dispatch({type: SET_UNAUTHENTICATED});
+    
+}
+
+const setAuthorizationHeader = (token) => {
+
+        const FBIdToken = `Bearer ${token}`
+        localStorage.setItem('FBIdToken', FBIdToken)
+
+        // sempre que fizer uma requisição via axios vai ter essa header com o token do usuario
+        axios.defaults.headers.common['Authorization'] = FBIdToken 
+}
+
 
 export const getUserData = () => (dispatch) => {
+    console.log('ok')
     axios.get('/user')
         .then( res => {
+            console.log('seending' + res)
             dispatch({type: SET_USER, payload: res.data})
         })
-        .catch( err => console.log(err))
+        .catch( err => {
+            console.log('bad')
+            console.log(err)
+        })
 }

@@ -1,13 +1,14 @@
 // * libraries
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 // fazer validação dos tipos dos estados da classe
 import PropTypes from 'prop-types'
-// requisição
-import axios from 'axios'
 // rota
 import {Link} from 'react-router-dom'
 
-
+// Redux stuffs
+import {connect} from 'react-redux'
+// pegar a action para cadastrar um novo usuario
+import {signupUser} from '../redux/actions/userActions'
 // * styles
 
 import AppIcon from '../images/twitter.png'
@@ -44,6 +45,14 @@ function Signup(props) {
     // pegar os styles criado na const, tem essa opção por causa do 'withStyles'
     const {classes} = props
 
+    // quando o usuario logar verificar se teve errors
+    useEffect( () => {
+        if(props.UI.errors){
+            setErrors(props.UI.errors)
+            setLoading(false)
+        }
+    }, [props.UI])
+
     // logar
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -57,19 +66,7 @@ function Signup(props) {
             handle
         }
 
-        // fazer requisição para logar
-        axios.post('/signup', newUserData)
-            .then( res => {
-                // acessao o Storage local do dominio atual e armazenar o token localmente
-                localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`)
-                setLoading(false)
-                props.history.push('/')
-            })
-            .catch( err => {
-                setLoading(false)
-                // colocar os erros no objeto
-                setErrors(err.response.data)
-            })
+        props.signupUser(newUserData, props.history)
     }
 
 
@@ -128,8 +125,22 @@ function Signup(props) {
 // verificar os campos e validar o tipo e outros dados
 Signup.protoTypes = {
     // a props classes deve ser um objeto e é obrigatório
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
+    UI: PropTypes.object.isRequired,
+    signupUser: PropTypes.func.isRequired
+}
+
+const mapStateToProps = (state) => ({
+    // pegar os estados do store do user e UI
+    user: state.user,
+    UI: state.UI
+})
+
+// actions que a props vai ter 
+const mapActionsToProps = {
+    signupUser
 }
 
 // passar os styles criado na const para a classe login, vai ter acesso atraves da props.classes
-export default withStyles(styles)(Signup)
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Signup))

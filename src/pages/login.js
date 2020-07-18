@@ -56,7 +56,7 @@ function Login(props) {
             // props.location.href('/')
             props.history.goBack()
         }
-    }, [])
+    }, [props.history])
 
     // logar
     const handleSubmit = (event) => {

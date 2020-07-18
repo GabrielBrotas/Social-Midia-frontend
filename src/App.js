@@ -2,12 +2,13 @@
 import React, { useEffect, useState } from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
-import formatToken from './utils/helper' 
+import axios from 'axios' 
 
 // * Redux
 import {Provider} from 'react-redux'
 import store from './redux/store'
-
+import {SET_AUTHENTICATED} from './redux/types'
+import {logoutUser, getUserData} from './redux/actions/userActions'
 
 // * styles
 import './App.css';
@@ -31,26 +32,30 @@ import themeFile from './utils/theme'
 const theme = createTheme(themeFile)
 
 
-
 function App() {
 
   const [token, setToken] = useState('')
-  const [authenticated, setAuthenticated] = useState(false)
+
 
   useEffect( () => {
-    setToken(formatToken(localStorage.FBIdToken));
+    setToken(localStorage.FBIdToken)
     if(token){
       // extrair as informações do token e transformar em um objeto
       const decodedToken = jwtDecode(token);
     
       if(decodedToken.exp * 1000 < Date.now()){
-        window.location.href = '/login'
-        setAuthenticated(false);
+        store.dispatch(logoutUser)
+
       } else {
-        setAuthenticated(true);
+        // mudar o authenticated para true no reducer 
+        store.dispatch({type: SET_AUTHENTICATED})
+        // passar o token do usuario para a header
+        axios.defaults.headers.common['Authorization'] = token
+        // com o user authenticated, pegar os dados
+        store.dispatch(getUserData())
       }
     }
-  }, [token, localStorage.FBIdToken])
+  }, [token])
 
   return (
     // passar o theme e o redux para toda app
@@ -62,8 +67,8 @@ function App() {
         <div className="container">
 
         <Switch>
-          <AuthRoute exact path="/signup" component={signup} authenticated={authenticated} />
-          <AuthRoute exact path="/login" component={login} authenticated={authenticated} />
+          <AuthRoute exact path="/signup" component={signup} />
+          <AuthRoute exact path="/login" component={login} />
           <Route exact path="/" component={home}  />
         </Switch>
 

@@ -1,54 +1,70 @@
 // * libraries
-import React, { Component } from 'react'
-// fazer requisição externa
-import axios from 'axios'
+import React, { useState, useEffect } from 'react'
 // criar colunas
 import Grid from '@material-ui/core/Grid'
+import PropTypes from 'prop-types'
+
+// redux
+import {connect, useDispatch, useSelector} from 'react-redux'
+import {getScreams} from '../redux/actions/dataActions'
 
 // * components
 // componente da scream
 import Scream from '../components/Scream'
 
-class home extends Component {
+function Home(props) {
 
-    state = {
-        screams: null
-    }
+    const screamsList = useSelector( state => state.data)
+    const {loading, screams, error} = screamsList
 
-    componentDidMount(){
-        // pegar todas as screams na api, foi definida a url da api no package.json em 'proxy'
-        axios.get('/screams')
-            .then( res => {
-                this.setState({
-                    screams: res.data
-                })
-            })
-            .catch( err => console.log(err))
-    }
+    const dispatch = useDispatch()
 
-    render() {
-        // colocar todas as screams, quando forem carregadas, no formato padrao do component 'Scream'
-        let recentScreamsMarkup = this.state.screams 
-        ? this.state.screams.map( (scream) => <Scream key={scream.screamId} scream={scream} />) 
-        :  <p>Loading..</p> 
-        
-        return (
-            // display grid que vai ser o container (pai) e dentro vai ter a quantidade de grids(colunas) que quere com a largura que cada um vai ocupar
-            <Grid container spacing={4}>
-                
-                {/* coluna das screams */}
-                <Grid item sm={8} xs={12}>
-                    {recentScreamsMarkup}
-                </Grid>
+    useEffect( () => {
+        dispatch(getScreams())
+    }, [dispatch])
 
-                {/* coluna do perfil do usuario */}
-                <Grid item sm={4} xs={12}>
-                    <p>Profile...</p>
-                </Grid>
-                
+
+    // colocar todas as screams, quando forem carregadas, no formato padrao do component 'Scream'
+    let recentScreamsMarkup = screams 
+    ? screams.map( (scream) => <Scream key={scream.screamId} scream={scream} />) 
+    :  <p>Loading..</p> 
+    
+    return (
+        // display grid que vai ser o container (pai) e dentro vai ter a quantidade de grids(colunas) que quere com a largura que cada um vai ocupar
+        <Grid container spacing={4}>
+            
+            {/* coluna das screams */}
+            <Grid item sm={8} xs={12}>
+                {recentScreamsMarkup}
             </Grid>
-        )
-    }
+
+            {/* coluna do perfil do usuario */}
+            <Grid item sm={4} xs={12}>
+                <p>Profile...</p>
+            </Grid>
+            
+        </Grid>
+    )
+    
 }
-export default home
+
+// verificar os campos e validar o tipo e outros dados
+Home.protoTypes = {
+    // a props classes deve ser um objeto e é obrigatório
+    classes: PropTypes.object.isRequired,
+    getScreams: PropTypes.func.isRequired,
+    screams: PropTypes.object.isRequired,
+    UI: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
+}
+
+const mapStateToProps = (state) => ({
+    screams: state.data,
+})
+
+const mapActionsToProps = {
+    getScreams
+}
+
+export default connect(mapStateToProps, mapActionsToProps)(Home)
 
