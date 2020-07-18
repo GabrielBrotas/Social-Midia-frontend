@@ -1,5 +1,5 @@
 // * libraries
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 // fazer validação dos tipos dos estados da classe
 import PropTypes from 'prop-types'
 // requisição
@@ -32,33 +32,29 @@ const styles = (theme) => (
 )
 
 
-class signup extends Component {
+function Signup(props) {
 
-    constructor(){
-        super();
-        this.state = {
-            email: '',
-            password: '',
-            confirmPassword: '',
-            handle: '',
-            loading: false,
-            errors: {}
-        }
-    }
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [handle, setHandle]= useState('')
+    const [loading, setLoading] = useState(false)
+    const [errors, setErrors] = useState({})
+
+    // pegar os styles criado na const, tem essa opção por causa do 'withStyles'
+    const {classes} = props
 
     // logar
-    handleSubmit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
 
-        this.setState({
-            loading: true
-        })
+        setLoading(true)
 
         const newUserData = {
-            email: this.state.email,
-            password: this.state.password,
-            confirmPassword: this.state.confirmPassword,
-            handle: this.state.handle
+            email,
+            password,
+            confirmPassword,
+            handle
         }
 
         // fazer requisição para logar
@@ -66,92 +62,74 @@ class signup extends Component {
             .then( res => {
                 // acessao o Storage local do dominio atual e armazenar o token localmente
                 localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`)
-                this.setState({
-                    loading: false
-                })
-                this.props.history.push('/')
+                setLoading(false)
+                props.history.push('/')
             })
             .catch( err => {
-                this.setState({
-                    // colocar os erros no objeto
-                    errors: err.response.data,
-                    loading: false
-                })
+                setLoading(false)
+                // colocar os erros no objeto
+                setErrors(err.response.data)
             })
-        
     }
 
-    // quando o valor de um campo mudar...
-    handleChange = (event) =>{
-        this.setState({
-            // [event.target.name] <- se o nome do campo for 'email' o entao vai mudar o valor do email no estado, se for 'nome' vai mudar o campo do nome, ...
-            [event.target.name]: event.target.value
-        });
-    }
 
-    render() {
-        // pegar os styles criado na const, tem essa opção por causa do 'withStyles'
-        const {classes} = this.props
-        // pegar os erros e se está carregando
-        const {errors, loading} = this.state
+    return (
+        // coluna geral e criar uma classe atraves do 'classes' para dar estilo na const
+        <Grid container className={classes.form}>
+            <Grid item sm/>
 
-        return (
-            // coluna geral e criar uma classe atraves do 'classes' para dar estilo na const
-            <Grid container className={classes.form}>
-                <Grid item sm/>
+            <Grid item sm>
+                {/* logo */}
+                <img src={AppIcon} alt="logo" className={classes.image}/>
 
-                <Grid item sm>
-                    {/* logo */}
-                    <img src={AppIcon} alt="logo" className={classes.image}/>
+                {/*  */}
+                <Typography variant="h3" className={classes.pageTitle}>Signup</Typography>
 
-                    {/*  */}
-                    <Typography variant="h3" className={classes.pageTitle}>Signup</Typography>
+                <form noValidate onSubmit={handleSubmit}>
 
-                    <form noValidate onSubmit={this.handleSubmit}>
+                    {/* campo de texto para o email, o helperText é um texto formatado para caso de erro no login ele mostrar no campo com um estilo diferente */}
+                    <TextField id="email" name="email" type="email" label="Email" className={classes.textField} value={email} onChange={(e) => setEmail(e.target.value)} fullWidth helperText={errors.email} error={errors.email ? true : false}/> 
 
-                        {/* campo de texto para o email, o helperText é um texto formatado para caso de erro no login ele mostrar no campo com um estilo diferente */}
-                        <TextField id="email" name="email" type="email" label="Email" className={classes.textField} value={this.state.email} onChange={this.handleChange} fullWidth helperText={errors.email} error={errors.email ? true : false}/> 
+                    <TextField id="password" name="password" type="password" label="Password" className={classes.textField} value={password} onChange={(e) => setPassword(e.target.value)} fullWidth helperText={errors.password} error={errors.password ? true : false} />
 
-                        <TextField id="password" name="password" type="password" label="Password" className={classes.textField} value={this.state.password} onChange={this.handleChange} fullWidth helperText={errors.password} error={errors.password ? true : false} />
+                    <TextField id="confirmPassword" name="confirmPassword" type="password" label="Confirm Password" className={classes.textField} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} fullWidth helperText={errors.confirmPassword} error={errors.confirmPassword ? true : false} />   
 
-                        <TextField id="confirmPassword" name="confirmPassword" type="password" label="Confirm Password" className={classes.textField} value={this.state.confirmPassword} onChange={this.handleChange} fullWidth helperText={errors.confirmPassword} error={errors.confirmPassword ? true : false} />   
+                    <TextField id="handle" name="handle" type="text" label="Handle" className={classes.textField} value={handle} onChange={(e) => setHandle(e.target.value)} fullWidth helperText={errors.handle} error={errors.handle ? true : false} />   
 
-                        <TextField id="handle" name="handle" type="text" label="Handle" className={classes.textField} value={this.state.handle} onChange={this.handleChange} fullWidth helperText={errors.handle} error={errors.handle ? true : false} />   
+                    {/* errors.general vem da API, caso dê erro nas credenciais */}
+                    {errors.general && 
+                        <Typography variant="body2" className={classes.customError}>
+                            {errors.general}
+                        </Typography>
+                    }
+                    
+                    <Button type="submit" variant="contained" color="primary" className={classes.button} disabled={loading}>
+                        Sign Up
+                        {loading && (
+                            <CircularProgress size={30} className={classes.progress}/>
+                        )}
+                    </Button>
 
-                        {/* errors.general vem da API, caso dê erro nas credenciais */}
-                        {errors.general && 
-                            <Typography variant="body2" className={classes.customError}>
-                                {errors.general}
-                            </Typography>
-                        }
-                        
-                        <Button type="submit" variant="contained" color="primary" className={classes.button} disabled={loading}>
-                            Sign Up
-                            {loading && (
-                                <CircularProgress size={30} className={classes.progress}/>
-                            )}
-                        </Button>
+                    <br/>
 
-                        <br/>
+                    <small> Already have an account ? Login <Link to="/login">here</Link> </small>
 
-                        <small> Already have an account ? Login <Link to="/login">here</Link> </small>
-
-                    </form>
-
-                </Grid>
-
-                <Grid item sm/>
+                </form>
 
             </Grid>
-        )
-    }
+
+            <Grid item sm/>
+
+        </Grid>
+    )
+    
 }
 
 // verificar os campos e validar o tipo e outros dados
-signup.protoTypes = {
+Signup.protoTypes = {
     // a props classes deve ser um objeto e é obrigatório
     classes: PropTypes.object.isRequired
 }
 
 // passar os styles criado na const para a classe login, vai ter acesso atraves da props.classes
-export default withStyles(styles)(signup)
+export default withStyles(styles)(Signup)

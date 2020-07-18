@@ -1,12 +1,13 @@
 // * libraries
-import React, { Component } from 'react'
+import React, {useState, useEffect} from 'react'
 // fazer validação dos tipos dos estados da classe
 import PropTypes from 'prop-types'
-// requisição
-import axios from 'axios'
 // rota
 import {Link} from 'react-router-dom'
 
+// * Redux
+import {connect } from 'react-redux'
+import {loginUser} from '../redux/actions/userActions' 
 
 
 // * styles
@@ -33,117 +34,109 @@ const styles = (theme) => (
 )
 
 
-class login extends Component {
+function Login(props) {
 
-    constructor(){
-        super();
-        this.state = {
-            email: '',
-            password: '',
-            loading: false,
-            errors: {}
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [errors, setErrors] = useState({})
+
+    // pegar os styles criado na const, tem essa opção por causa do 'withStyles'
+    const {classes, UI: { loading } } = props   
+ 
+    // quando o usuario logar verificar se teve errors
+    useEffect( () => {
+        if(props.UI.errors){
+            setErrors(props.UI.errors)
         }
-    }
+    }, [props.UI])
+
+    // verificar se o user já está logado
+    useEffect( () => {
+        if(localStorage.FBIdToken){
+            // props.location.href('/')
+            props.history.goBack()
+        }
+    }, [])
 
     // logar
-    handleSubmit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
-
-        this.setState({
-            loading: true
-        })
-   
         const userData = {
-            email: this.state.email,
-            password: this.state.password
+            email,
+            password,
         }
-        
-        // fazer requisição para logar
-        axios.post('/login', userData)
-            .then( res => {
- 
-                localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`)
-                this.setState({
-                    loading: false
-                })
-                this.props.history.push('/')
-            })
-            .catch( err => {
-                this.setState({
-                    // colocar os erros no objeto
-                    errors: err.response.data,
-                    loading: false
-                })
-            })
+        props.loginUser(userData, props.history)
     }
 
-    // quando o valor de um campo mudar...
-    handleChange = (event) =>{
-        this.setState({
-            // [event.target.name] <- se o nome do campo for 'email' o entao vai mudar o valor do email no estado, se for 'nome' vai mudar o campo do nome, ...
-            [event.target.name]: event.target.value
-        });
-    }
+    
 
-    render() {
-        // pegar os styles criado na const, tem essa opção por causa do 'withStyles'
-        const {classes} = this.props
-        // pegar os erros e se está carregando
-        const {errors, loading} = this.state
 
-        return (
-            // coluna geral e criar uma classe atraves do 'classes' para dar estilo na const
-            <Grid container className={classes.form}>
-                <Grid item sm/>
+    return (
+        // coluna geral e criar uma classe atraves do 'classes' para dar estilo na const
+        <Grid container className={classes.form}>
+            <Grid item sm/>
 
-                <Grid item sm>
-                    {/* logo */}
-                    <img src={AppIcon} alt="logo" className={classes.image}/>
+            <Grid item sm>
+                {/* logo */}
+                <img src={AppIcon} alt="logo" className={classes.image}/>
 
-                    {/*  */}
-                    <Typography variant="h3" className={classes.pageTitle}>Login</Typography>
+                {/*  */}
+                <Typography variant="h3" className={classes.pageTitle}>Login</Typography>
 
-                    <form noValidate onSubmit={this.handleSubmit}>
+                <form noValidate onSubmit={handleSubmit}>
 
-                        {/* campo de texto para o email, o helperText é um texto formatado para caso de erro no login ele mostrar no campo com um estilo diferente */}
-                        <TextField id="email" name="email" type="email" label="Email" className={classes.textField} value={this.state.email} onChange={this.handleChange} fullWidth helperText={errors.email} error={errors.email ? true : false}/> 
+                    {/* campo de texto para o email, o helperText é um texto formatado para caso de erro no login ele mostrar no campo com um estilo diferente */}
+                    <TextField id="email" name="email" type="email" label="Email" className={classes.textField} value={email} onChange={(e) => setEmail(e.target.value)} fullWidth helperText={errors.email} error={errors.email ? true : false}/> 
 
-                        <TextField id="password" name="password" type="password" label="Password" className={classes.textField} value={this.state.password} onChange={this.handleChange} fullWidth helperText={errors.password} error={errors.password ? true : false} />   
-  
-                        {/* errors.general vem da API, caso dê erro nas credenciais */}
-                        {errors.general && 
-                            <Typography variant="body2" className={classes.customError}>
-                                {errors.general}
-                            </Typography>
-                        }
-                        
-                        <Button type="submit" variant="contained" color="primary" className={classes.button} disabled={loading}>
-                            Login
-                            {loading && (
-                                <CircularProgress size={30} className={classes.progress}/>
-                            )}
-                        </Button>
+                    <TextField id="password" name="password" type="password" label="Password" className={classes.textField} value={password} onChange={ (e) => setPassword(e.target.value)} fullWidth helperText={errors.password} error={errors.password ? true : false} />   
 
-                        <br/>
+                    {/* errors.general vem da API, caso dê erro nas credenciais */}
+                    {errors.general && 
+                        <Typography variant="body2" className={classes.customError}>
+                            {errors.general}
+                        </Typography>
+                    }
+                    
+                    <Button type="submit" variant="contained" color="primary" className={classes.button} disabled={loading}>
+                        Login
+                        {loading && (
+                            <CircularProgress size={30} className={classes.progress}/>
+                        )}
+                    </Button>
 
-                        <small>dont have an account ? sign up <Link to="/signup">here</Link> </small>
+                    <br/>
 
-                    </form>
+                    <small>dont have an account ? sign up <Link to="/signup">here</Link> </small>
 
-                </Grid>
-
-                <Grid item sm/>
+                </form>
 
             </Grid>
-        )
-    }
+
+            <Grid item sm/>
+
+        </Grid>
+    )
 }
 
 // verificar os campos e validar o tipo e outros dados
-login.protoTypes = {
+Login.protoTypes = {
     // a props classes deve ser um objeto e é obrigatório
-    classes: PropTypes.object.isRequired
+    classes: PropTypes.object.isRequired,
+    loginUser: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
+    UI: PropTypes.object.isRequired
+}
+
+// quais dados vai querer da store
+const mapStateToProps = (state) => ({
+    user: state.user,
+    UI: state.UI
+})
+
+// quais actions vai usar 
+const mapActionsToProps = {
+    loginUser
 }
 
 // passar os styles criado na const para a classe login, vai ter acesso atraves da props.classes
-export default withStyles(styles)(login)
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Login))

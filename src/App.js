@@ -1,7 +1,13 @@
 // * libraries
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
-import jwtDecode from 'jwt-decode' 
+import jwtDecode from 'jwt-decode'
+import formatToken from './utils/helper' 
+
+// * Redux
+import {Provider} from 'react-redux'
+import store from './redux/store'
+
 
 // * styles
 import './App.css';
@@ -24,41 +30,51 @@ import themeFile from './utils/theme'
 // esses styles serão global
 const theme = createTheme(themeFile)
 
-const token = localStorage.FBIdToken;
-let authenticated;
-if(token){
-  // extrair as informações do token e transformar em um objeto
-  const decodedToken = jwtDecode(token);
 
-  if(decodedToken.exp * 1000 < Date.now()){
-    window.location.href = '/login'
-    authenticated = false;
-  } else {
-    authenticated = true
-  }
-}
 
-class App extends Component {
-  render() {
-    return (
-      <MuiThemeProvider theme={theme}>
-        <div className="App">
-         <Router>
-            <Navbar />
-            <div className="container">
+function App() {
 
-            <Switch>
-              <AuthRoute exact path="/signup" component={signup} authenticated={authenticated} />
-              <AuthRoute exact path="/login" component={login} authenticated={authenticated} />
-              <Route exact path="/" component={home}  />
-            </Switch>
+  const [token, setToken] = useState('')
+  const [authenticated, setAuthenticated] = useState(false)
 
-           </div>
-          </Router>
+  useEffect( () => {
+    setToken(formatToken(localStorage.FBIdToken));
+    if(token){
+      // extrair as informações do token e transformar em um objeto
+      const decodedToken = jwtDecode(token);
+    
+      if(decodedToken.exp * 1000 < Date.now()){
+        window.location.href = '/login'
+        setAuthenticated(false);
+      } else {
+        setAuthenticated(true);
+      }
+    }
+  }, [token, localStorage.FBIdToken])
+
+  return (
+    // passar o theme e o redux para toda app
+    <MuiThemeProvider theme={theme}>
+    <Provider store={store}>
+
+      <Router>
+        <Navbar />
+        <div className="container">
+
+        <Switch>
+          <AuthRoute exact path="/signup" component={signup} authenticated={authenticated} />
+          <AuthRoute exact path="/login" component={login} authenticated={authenticated} />
+          <Route exact path="/" component={home}  />
+        </Switch>
+
         </div>
-      </MuiThemeProvider>
-    )
-  }
+      </Router>
+
+    </Provider>
+
+    </MuiThemeProvider>
+  )
+
 }
 
 
