@@ -4,6 +4,9 @@ import withStyles from '@material-ui/core/styles/withStyles'
 import {Link} from 'react-router-dom'
 import dayjs from 'dayjs'
 
+// components
+import EditDetails from './EditDetails'
+
 // redux
 import {connect} from 'react-redux'
 import {logoutUser, uploadImage} from '../redux/actions/userActions'
@@ -21,7 +24,10 @@ import LocationOn from '@material-ui/icons/LocationOn';
 import LinkIcon from '@material-ui/icons/Link'
 import CalendarToday from '@material-ui/icons/CalendarToday'
 import EditIcon from '@material-ui/icons/Edit'
- 
+import KeyboardReturn from '@material-ui/icons/KeyboardReturn'
+
+
+
 const styles = (theme) => ({
   paper: {
     padding: 20
@@ -71,7 +77,7 @@ const styles = (theme) => ({
 })
 
 class Profile extends Component {
-    
+
   // Mudar foto do perfil
   handleImageChange = (event) => {
     // pegar a imagem, mesmo escolhendo apenas uma vai vim em um array entao vamos pegar a primeira
@@ -91,6 +97,10 @@ class Profile extends Component {
     const fileInput = document.getElementById('imageInput')
     // e clicar
     fileInput.click()
+  }
+
+  handleLogout = () => {
+    this.props.logoutUser()
   }
 
   render() {
@@ -169,6 +179,14 @@ class Profile extends Component {
                   <CalendarToday color="primary"/> {" "} <span> Joined {dayjs(createdAt).format('MMM YYYY')}</span>
                     
                 </div>
+                <Tooltip title="Logout" placement="top">
+                  <IconButton onClick={this.handleLogout}>
+                    <KeyboardReturn color="primary" />
+                  </IconButton>
+                </Tooltip>
+
+                <EditDetails />
+
               </div>
             </Paper>
           ) : (

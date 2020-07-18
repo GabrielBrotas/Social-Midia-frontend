@@ -2,7 +2,6 @@ import {SET_ERRORS, SET_USER, CLEAR_ERRORS, LOADING_UI, SET_UNAUTHENTICATED, LOA
 import axios from 'axios'
 
 export const loginUser = (userData, history) => (dispatch) => {
-
     // mandar actions para dizer que está carregando a pagina
     dispatch({type: LOADING_UI});
     
@@ -64,15 +63,14 @@ export const uploadImage = (formData) => (dispatch) => {
         .catch(err => console.log(err))
 }
 
-const setAuthorizationHeader = (token) => {
-
-        const FBIdToken = `Bearer ${token}`
-        localStorage.setItem('FBIdToken', FBIdToken)
-
-        // sempre que fizer uma requisição via axios vai ter essa header com o token do usuario
-        axios.defaults.headers.common['Authorization'] = FBIdToken 
+export const editUserDetails = (userDetails) => (dispatch) => {
+    dispatch({type: LOADING_USER})
+    axios.post('/user', userDetails)
+        .then( () => {
+            dispatch(getUserData())
+        })
+        .catch( err=> console.log(err))
 }
-
 
 export const getUserData = () => (dispatch) => {
 
@@ -85,5 +83,14 @@ export const getUserData = () => (dispatch) => {
         .catch( err => {
             console.log(err)
         })
+}
+
+const setAuthorizationHeader = (token) => {
+
+    const FBIdToken = `Bearer ${token}`
+    localStorage.setItem('FBIdToken', FBIdToken)
+
+    // sempre que fizer uma requisição via axios vai ter essa header com o token do usuario
+    axios.defaults.headers.common['Authorization'] = FBIdToken 
 }
 

@@ -15,7 +15,6 @@ import Profile from '../components/Profile'
 
 
 function Home(props) {
-
     const screamsList = useSelector( state => state.data)
     const {loading, screams, error} = screamsList
 
@@ -70,6 +69,7 @@ Home.protoTypes = {
 
 const mapStateToProps = (state) => ({
     screams: state.data,
+    user: state.user
 })
 
 const mapActionsToProps = {
