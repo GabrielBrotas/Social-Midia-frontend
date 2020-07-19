@@ -16,3 +16,5 @@ export const GET_SCREAMS_ERROR = 'GET_SCREAMS_ERROR'
 
 export const LIKE_SCREAM = 'LIKE_SCREAM'
 export const UNLIKE_SCREAM = 'UNLIKE_SCREAM'
+
+export const DELETE_SCREAM = 'DELETE_SCREAM'

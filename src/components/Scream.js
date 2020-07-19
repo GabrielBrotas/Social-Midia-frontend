@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import {Link} from 'react-router-dom'
 import dayjs from 'dayjs' // vamos usar ela para formatar o tempo do post
 import relativeTime from 'dayjs/plugin/relativeTime' //2days ago.., 2 hours agor...
 import PropTypes from 'prop-types'
 import MyButton from '../utils/MyButton'
+import DeleteScream from './DeleteScream'
 
 // MUI stuff
 import withStyles from '@material-ui/core/styles/withStyles'
@@ -23,6 +24,7 @@ import {likeScream, unlikeScream} from '../redux/actions/dataActions'
 
 const styles = {
     card: {
+        position: 'relative',
         display: 'flex',
         marginBottom: 20,
     },
@@ -37,7 +39,8 @@ const styles = {
 }
 
 function Scream(props) {
-    
+
+
     const {classes, scream: {body, createdAt, userImage, userHandle, likeCount, commentCount}} = props
 
     const dispatch = useDispatch()
@@ -61,7 +64,6 @@ function Scream(props) {
             return false
         }  
     }
-    
 
     const likeButton = !props.authenticated ? (
         <MyButton tip="Like">
@@ -81,6 +83,9 @@ function Scream(props) {
         )
     )
 
+    const deleteButton = props.authenticated && userHandle === props.handle ? (
+        <DeleteScream screamId={props.scream.screamId}/>
+    ) : null
 
     return (
         <Card className={classes.card}>
@@ -100,6 +105,8 @@ function Scream(props) {
                 >
                     {userHandle}
                 </Typography>
+
+                {deleteButton}
 
                 {/* data que criou o post */}
                 <Typography 
@@ -134,7 +141,6 @@ function Scream(props) {
 Scream.protoTypes = {
     likeScream: PropTypes.func.isRequired,
     unlikeScream: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired,
     scream: PropTypes.object.isRequired,
     classes: PropTypes.object.isRequired,
 }

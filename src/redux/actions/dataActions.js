@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {GET_SCREAMS_SUCCESS, GET_SCREAMS_ERROR, LOADING_DATA, LIKE_SCREAM, UNLIKE_SCREAM} from '../types'
+import {GET_SCREAMS_SUCCESS, GET_SCREAMS_ERROR, LOADING_DATA, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM} from '../types'
 
 
 export const getScreams = () => (dispatch) => {
@@ -35,4 +35,12 @@ export const unlikeScream = (screamId) => dispatch => {
         .catch( err => {
             console.log(err)
         })
+}
+
+export const deleteScream = (screamId) => (dispatch) => {
+    axios.delete(`/scream/${screamId}`)
+        .then( () => {
+            dispatch({type: DELETE_SCREAM, payload: screamId})
+        })
+        .catch(err=> console.log(err))
 }
