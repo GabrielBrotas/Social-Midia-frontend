@@ -6,7 +6,7 @@ import MyButton from '../utils/MyButton'
 
 // redux
 import {connect} from 'react-redux'
-import {postScream} from '../redux/actions/dataActions'
+import {postScream, clearErrors} from '../redux/actions/dataActions'
 
 // Material UI Stuffs
 import Button from '@material-ui/core/Button'
@@ -23,14 +23,19 @@ import CloseIcon from '@material-ui/icons/Close'
 const styles = () => ({
     submitButton: {
         position: 'relative',
+        margin: '1rem 0',
+        float: 'right'
     },
     progressSpinner: {
         position: 'absolute'
     },
     closeButton: {
         position: 'absolute',
-        left: "90%",
-        top: "10%"
+        left: "91%",
+        top: "6%"
+    },
+    textField: {
+        margin: "10px auto 10px auto"
     }
 })
 
@@ -50,13 +55,15 @@ function PostScream(props) {
         }
         if(!props.UI.errors && !props.UI.loading){
             setBody('')
-            handleClose()
+            setOpen(false)
         }
 
     }, [props])
 
     const handleClose = () => {
         setOpen(false)
+        setErrors({})
+        props.clearErrors()
     }
 
     const handleSubmit = (event) => {
@@ -79,9 +86,11 @@ function PostScream(props) {
                 <MyButton tip="Close" onClick={() => handleClose()} tipClassName={classes.closeButton}>
                     <CloseIcon />
                 </MyButton>
+
                 <DialogTitle>
                     Post new Scream
                 </DialogTitle>
+
                 <DialogContent>
                     <form onSubmit={(e) => handleSubmit(e)} >
                         <TextField 
@@ -89,6 +98,7 @@ function PostScream(props) {
                         type="text"
                         label="Scream !!"
                         rows="3"
+                        multiline
                         placeholder="type something"
                         error={errors.body ? true : false}
                         helperText={errors.body}
@@ -96,6 +106,7 @@ function PostScream(props) {
                         onChange={(e) => setBody(e.target.value)}
                         fullWidth
                         />
+                        
                         <Button type="submit" variant="contained" color="primary" className={classes.submitButton} disabled={loading}>
                             Submit
                             {loading && (<CircularProgress size={30} className={classes.progressSpinner}/>)}
@@ -111,6 +122,7 @@ function PostScream(props) {
 
 PostScream.propTypes = {
     postScream: PropTypes.func.isRequired,
+    clearErrors: PropTypes.func.isRequired,
     UI: PropTypes.object.isRequired,
 }
 
@@ -119,7 +131,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapActionsToProps = {
-    postScream
+    postScream,
+    clearErrors
 }
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(PostScream))

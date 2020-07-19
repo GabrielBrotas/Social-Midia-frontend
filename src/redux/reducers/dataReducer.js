@@ -1,4 +1,4 @@
-import {GET_SCREAMS_ERROR, LOADING_DATA, GET_SCREAMS_SUCCESS, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM, POST_SCREAM} from '../types'
+import {GET_SCREAMS_ERROR, LOADING_DATA, GET_SCREAMS_SUCCESS, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM, POST_SCREAM, GET_SCREAM_SUCCESS} from '../types'
 
 const initialState = {
     loading: false,
@@ -17,7 +17,10 @@ export default function(state = initialState, action){
         
         case GET_SCREAMS_ERROR:
             return {...state, error: true, loading: false}
-        
+
+        case GET_SCREAM_SUCCESS:
+            return {...state, scream: action.payload}
+
         case LIKE_SCREAM:
         case UNLIKE_SCREAM:
             let index = state.screams.findIndex((scream) => scream.screamId === action.payload.screamId);

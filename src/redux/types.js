@@ -9,10 +9,13 @@ export const SET_ERRORS = 'SET_ERRORS'
 export const LOADING_UI = 'LOADING_UI'
 export const CLEAR_ERRORS = 'CLEAR_ERRORS'
 
+export const STOP_LOADING_UI = 'STOP_LOADING_UI'
 // Data reducer types
 export const LOADING_DATA = 'LOADING_DATA'
 export const GET_SCREAMS_SUCCESS = 'GET_SCREAMS_SUCCESS'
 export const GET_SCREAMS_ERROR = 'GET_SCREAMS_ERROR'
+
+export const GET_SCREAM_SUCCESS = 'GET_SCREAM_SUCCESS'
 
 export const LIKE_SCREAM = 'LIKE_SCREAM'
 export const UNLIKE_SCREAM = 'UNLIKE_SCREAM'

@@ -5,6 +5,7 @@ import relativeTime from 'dayjs/plugin/relativeTime' //2days ago.., 2 hours agor
 import PropTypes from 'prop-types'
 import MyButton from '../utils/MyButton'
 import DeleteScream from './DeleteScream'
+import ScreamDialog from './ScreamDialog'
 
 // MUI stuff
 import withStyles from '@material-ui/core/styles/withStyles'
@@ -41,7 +42,7 @@ const styles = {
 function Scream(props) {
 
 
-    const {classes, scream: {body, createdAt, userImage, userHandle, likeCount, commentCount}} = props
+    const {classes, scream: {body, createdAt, userImage, userHandle, likeCount, commentCount, screamId}} = props
 
     const dispatch = useDispatch()
 
@@ -130,8 +131,8 @@ function Scream(props) {
                     <ChatIcon color="primary" />
                 </MyButton>
                 <span>{commentCount} comments</span>
+                <ScreamDialog screamId={screamId} userHandle={userHandle} />
             </CardContent>
-            
 
         </Card>
     )

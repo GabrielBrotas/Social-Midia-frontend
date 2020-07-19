@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {GET_SCREAMS_SUCCESS, GET_SCREAMS_ERROR, LOADING_DATA, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM, SET_ERRORS, POST_SCREAM, CLEAR_ERRORS, LOADING_UI} from '../types'
+import {GET_SCREAMS_SUCCESS, GET_SCREAMS_ERROR, LOADING_DATA, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM, SET_ERRORS, POST_SCREAM, CLEAR_ERRORS, LOADING_UI, GET_SCREAM_SUCCESS, STOP_LOADING_UI} from '../types'
 
 
 export const getScreams = () => (dispatch) => {
@@ -51,10 +51,24 @@ export const postScream = (newScream) => dispatch => {
         })
 }
 
+export const getScream = (screamId) => (dispatch) => {
+    dispatch({type: LOADING_UI})
+    axios.get(`/scream/${screamId}`)
+        .then( res => {
+            dispatch({type: GET_SCREAM_SUCCESS, payload: res.data})
+            dispatch({type: STOP_LOADING_UI})
+        })
+        .catch( err => console.log(err))
+}
+
 export const deleteScream = (screamId) => (dispatch) => {
     axios.delete(`/scream/${screamId}`)
         .then( () => {
             dispatch({type: DELETE_SCREAM, payload: screamId})
         })
         .catch(err=> console.log(err))
+}
+
+export const clearErrors = () => (dispatch) => {
+    dispatch({type: CLEAR_ERRORS});
 }
