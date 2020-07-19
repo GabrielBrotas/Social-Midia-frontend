@@ -19,7 +19,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
 
 // Redux 
-import {connect, useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import {likeScream, unlikeScream} from '../redux/actions/dataActions'
 
 const styles = {

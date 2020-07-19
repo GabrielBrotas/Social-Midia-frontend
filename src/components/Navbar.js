@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import MyButton from '../utils/MyButton'
-
+import PostScream from './PostScream'
 // npm install --save @material-ui/core
 // Material UI stuffs, vamos importar os componentes um por vez para nao pesar a aplicação tendo que pegar tudo.
 import AppBar from '@material-ui/core/AppBar'
@@ -11,7 +11,6 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 
 // Icons
-import AddIcon from '@material-ui/icons/Add'
 import HomeIcon from '@material-ui/icons/Home'
 import Notifications from '@material-ui/icons/Notifications'
 
@@ -25,9 +24,7 @@ class Navbar extends Component {
                     authenticated ? (
                         <Fragment>
 
-                            <MyButton tip="Post a new Scream">
-                                <AddIcon />
-                            </MyButton>
+                            <PostScream />
 
                             <MyButton tip="Home">
                                 <Link to="/">

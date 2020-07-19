@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {GET_SCREAMS_SUCCESS, GET_SCREAMS_ERROR, LOADING_DATA, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM} from '../types'
+import {GET_SCREAMS_SUCCESS, GET_SCREAMS_ERROR, LOADING_DATA, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM, SET_ERRORS, POST_SCREAM, CLEAR_ERRORS, LOADING_UI} from '../types'
 
 
 export const getScreams = () => (dispatch) => {
@@ -34,6 +34,20 @@ export const unlikeScream = (screamId) => dispatch => {
         })
         .catch( err => {
             console.log(err)
+        })
+}
+
+// post scream
+export const postScream = (newScream) => dispatch => {
+    dispatch({type: LOADING_UI})
+
+    axios.post('/scream', newScream)
+        .then( res => {
+            dispatch({ type: POST_SCREAM, payload: res.data})
+            dispatch({type: CLEAR_ERRORS})
+        })
+        .catch( err => {
+            dispatch({type: SET_ERRORS, payload: err.response.data})
         })
 }
 

@@ -16,7 +16,7 @@ import Profile from '../components/Profile'
 
 function Home(props) {
     const screamsList = useSelector( state => state.data)
-    const {loading, screams, error} = screamsList
+    const {screams} = screamsList
 
     const userInfo = useSelector( state => state.user)
     const {likes, authenticated, credentials: {handle}} = userInfo
@@ -35,7 +35,7 @@ function Home(props) {
             screams.map( (scream) => (
                 <Scream key={scream.screamId} scream={scream} likes={likes} authenticated={authenticated} handle={handle}/>
             )))
-    }, [screamsList, likes, screams])
+    }, [screamsList, likes, screams, authenticated, handle])
     // colocar todas as screams, quando forem carregadas, no formato padrao do component 'Scream'
  
     
