@@ -18,6 +18,10 @@ function Home(props) {
     const screamsList = useSelector( state => state.data)
     const {loading, screams, error} = screamsList
 
+    const userInfo = useSelector( state => state.user)
+    const {likes, authenticated} = userInfo
+    
+
     const [recentScreamsMarkup, setRecentScreamsMarkup] = useState(null)
     const dispatch = useDispatch()
 
@@ -26,13 +30,13 @@ function Home(props) {
     }, [dispatch])
 
     useEffect( () => {
+        console.log(likes)
         screams && 
         setRecentScreamsMarkup(
             screams.map( (scream) => (
-                <Scream key={scream.screamId} scream={scream}  />
+                <Scream key={scream.screamId} scream={scream} likes={likes} authenticated={authenticated} />
             )))
-             
-    }, [screams])
+    }, [screamsList, likes])
     // colocar todas as screams, quando forem carregadas, no formato padrao do component 'Scream'
  
     

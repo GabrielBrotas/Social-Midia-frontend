@@ -1,14 +1,15 @@
-import {GET_SCREAMS_ERROR, GET_SCREAMS_LOADING, GET_SCREAMS_SUCCESS} from '../types'
+import {GET_SCREAMS_ERROR, LOADING_DATA, GET_SCREAMS_SUCCESS, LIKE_SCREAM, UNLIKE_SCREAM} from '../types'
 
 const initialState = {
     loading: false,
-    screams: null,
+    screams: [],
+    scream: {},
     error: null
 }
 
 export default function(state = initialState, action){
     switch(action.type){
-        case GET_SCREAMS_LOADING:
+        case LOADING_DATA:
             return {...state, loading: true};
         
         case GET_SCREAMS_SUCCESS:
@@ -16,6 +17,13 @@ export default function(state = initialState, action){
         
         case GET_SCREAMS_ERROR:
             return {...state, error: true, loading: false}
+        
+        case LIKE_SCREAM:
+        case UNLIKE_SCREAM:
+            let index = state.screams.findIndex((scream) => scream.screamId === action.payload.screamId);
+            state.screams[index] = action.payload;
+            return {...state}
+            
         default:
             return state
 
