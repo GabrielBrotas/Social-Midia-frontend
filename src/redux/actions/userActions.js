@@ -6,7 +6,7 @@ export const loginUser = (userData, history) => (dispatch) => {
     // mandar actions para dizer que está carregando a pagina
     dispatch({type: LOADING_UI});
     dispatch(logoutUser())
-    console.log('dispatchin login user')
+    
     // fazer requisição para logar o user
     axios.post('/login', userData)
     .then( res => {
@@ -16,7 +16,6 @@ export const loginUser = (userData, history) => (dispatch) => {
         history.push('/')
     })
     .catch( err => {
-        console.log('erro = ')
         console.log(err)
         dispatch({
             type: SET_ERRORS,
@@ -86,7 +85,6 @@ export const getUserData = () => (dispatch) => {
             dispatch({type: SET_USER, payload: res.data})
         })
         .catch( err => {
-            console.log('nao')
             console.log(err)
         })
 }

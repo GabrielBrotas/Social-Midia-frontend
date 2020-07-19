@@ -25,6 +25,11 @@ export default function(state = initialState, action){
         case UNLIKE_SCREAM:
             let index = state.screams.findIndex((scream) => scream.screamId === action.payload.screamId);
             state.screams[index] = action.payload;
+
+            // atualizar a qtd de like da scream unica 
+            if(state.scream.screamId === action.payload.screamId) {
+                state.scream = action.payload
+            }
             return {...state}
             
         case DELETE_SCREAM:
