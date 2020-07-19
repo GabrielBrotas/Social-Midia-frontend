@@ -38,6 +38,10 @@ const styles = theme => ({
     closeButton: {
         position: 'absolute',
         left: "90%"
+    },
+    expandButton: {
+        position: 'absolute',
+        left: "90%"
     }
 })
 
