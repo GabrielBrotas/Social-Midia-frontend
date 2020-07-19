@@ -2,9 +2,11 @@ import {SET_ERRORS, SET_USER, CLEAR_ERRORS, LOADING_UI, SET_UNAUTHENTICATED, LOA
 import axios from 'axios'
 
 export const loginUser = (userData, history) => (dispatch) => {
+    
     // mandar actions para dizer que está carregando a pagina
     dispatch({type: LOADING_UI});
-    
+    dispatch(logoutUser())
+    console.log('dispatchin login user')
     // fazer requisição para logar o user
     axios.post('/login', userData)
     .then( res => {
@@ -14,6 +16,8 @@ export const loginUser = (userData, history) => (dispatch) => {
         history.push('/')
     })
     .catch( err => {
+        console.log('erro = ')
+        console.log(err)
         dispatch({
             type: SET_ERRORS,
             payload: err.response.data
@@ -25,11 +29,12 @@ export const signupUser = (newUserData, history) => (dispatch) => {
 
     // mandar actions para dizer que está carregando a pagina
     dispatch({type: LOADING_UI});
-
+    dispatch(logoutUser())
     // fazer requisição para logar o user
     axios.post('/signup', newUserData)
-    .then( res => {
-        setAuthorizationHeader(res.data.token)
+    .then( async res => {
+        console.log(res.data)
+        await setAuthorizationHeader(res.data.userToken.i)
         dispatch(getUserData());
         dispatch({type: CLEAR_ERRORS})
         history.push('/')
@@ -75,12 +80,13 @@ export const editUserDetails = (userDetails) => (dispatch) => {
 export const getUserData = () => (dispatch) => {
 
     dispatch({type: LOADING_USER})
-
+   
     axios.get('/user')
         .then( res => {
             dispatch({type: SET_USER, payload: res.data})
         })
         .catch( err => {
+            console.log('nao')
             console.log(err)
         })
 }

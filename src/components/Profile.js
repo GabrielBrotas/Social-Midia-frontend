@@ -197,7 +197,7 @@ class Profile extends Component {
               <div className={classes.buttons}>
                   <Button variant="contained" color="primary" component={Link} to="/login">Login
                   </Button>
-                  <Button variant="contained" color="secondary" component={Link} to="/sign up">Sign up
+                  <Button variant="contained" color="secondary" component={Link} to="/signup">Sign up
                   </Button>
               </div>
 
