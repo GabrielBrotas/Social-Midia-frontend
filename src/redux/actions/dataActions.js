@@ -18,8 +18,10 @@ export const getScreams = () => (dispatch) => {
 
 // like a scream
 export const likeScream = (screamId) => dispatch => {   
+
     axios.get(`/scream/${screamId}/like`)
         .then( res => {
+
             dispatch({type: LIKE_SCREAM, payload: res.data})
         })
         .catch( err => {
@@ -28,6 +30,7 @@ export const likeScream = (screamId) => dispatch => {
 }
 // unlike scream
 export const unlikeScream = (screamId) => dispatch => {  
+
     axios.get(`/scream/${screamId}/unlike`)
         .then( res => {
             dispatch({type: UNLIKE_SCREAM, payload: res.data})

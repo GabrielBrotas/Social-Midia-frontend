@@ -38,7 +38,7 @@ function Scream(props) {
 
 
     const {classes, scream: {body, createdAt, userImage, userHandle, likeCount, commentCount, screamId}} = props
-    
+
     dayjs.extend(relativeTime)
     
     const deleteButton = props.authenticated && userHandle === props.handle ? (

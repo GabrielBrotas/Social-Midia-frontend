@@ -50,13 +50,7 @@ function Login(props) {
         }
     }, [props.UI])
 
-    // verificar se o user já está logado
-    useEffect( () => {
-        if(localStorage.FBIdToken){
-            // props.location.href('/')
-            props.history.goBack()
-        }
-    }, [props.history])
+
 
     // logar
     const handleSubmit = (event) => {

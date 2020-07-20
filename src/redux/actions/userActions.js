@@ -79,14 +79,11 @@ export const editUserDetails = (userDetails) => (dispatch) => {
 export const getUserData = () => (dispatch) => {
 
     dispatch({type: LOADING_USER})
-    console.log('2')
     axios.get('/user')
         .then( res => {
-            console.log('ok')
             dispatch({type: SET_USER, payload: res.data})
         })
         .catch( err => {
-            console.log('no')
             console.log(err)
         })
 }

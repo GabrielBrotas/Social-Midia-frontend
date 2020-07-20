@@ -1,6 +1,5 @@
 import { SET_USER, SET_AUTHENTICATED, SET_UNAUTHENTICATED, LOADING_USER, LIKE_SCREAM, UNLIKE_SCREAM} from '../types'
 
-
 const initialState = {
     authenticated: false,
     loading: false,

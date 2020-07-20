@@ -64,7 +64,6 @@ class ScreamDialog extends Component {
     }
     render() {
         const {classes, scream: {screamId, body, createdAt, likeCount, commentCount, userHandle, userImage, comments}, UI: {loading}} = this.props
-    
 
         const dialogMarkup = loading
         ? ( 
@@ -85,12 +84,11 @@ class ScreamDialog extends Component {
                 to={`/users/${userHandle}`}>
                     @{userHandle}
                 </Typography>
-                <hr className={classes.invisibleSeparator} />
 
                 <Typography variant="body2" color="textSecondary">
                     {dayjs(createdAt).format('h:mm a, MMMM DD YYYY')}
                 </Typography>
-                <hr className={classes.invisibleSeparator} />
+
                 
                 <Typography variant="body1">
                     {body}

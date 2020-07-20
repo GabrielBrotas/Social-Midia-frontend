@@ -8,14 +8,23 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
 const styles = themes => ({
-    ...themes
+    ...themes.allRest,
+        commentImage: {
+            maxWidth: '100%',
+            height: 100,
+            objectFit: 'cover',
+            borderRadius: '50%'
+        },
+        commentData: {
+            marginLeft: 20
+        }
 })
 
 class Comments extends Component {
 
     render(){
         const {comments, classes} = this.props
-        
+
         return(
             <Grid container>
                 {comments.map( comment => {
@@ -25,11 +34,15 @@ class Comments extends Component {
                         <Fragment key={createdAt}>
                             <Grid item sm={12}>
                                 <Grid container>
+                                <hr className={classes.invisibleSeparator} />
                                     <Grid item sm={2}>
+                                        
                                         <img src={userImage} alt="comment" className={classes.commentImage} />
                                     </Grid>
                                     <Grid item sm={9}>
+                                    
                                         <div className={classes.commentData}>
+                                        
                                             <Typography
                                             variant="h5"
                                             component={Link}
@@ -44,11 +57,10 @@ class Comments extends Component {
                                                 {dayjs(createdAt).format('h:mm a, MMMM DD YYYY')}
                                             </Typography>
 
-                                            <hr className={classes.invisibleSeparator} />
-
                                             <Typography
                                             variant="body1"
                                             >{body}</Typography>
+
                                         </div>
                                     </Grid>
                                 </Grid>
