@@ -1,4 +1,4 @@
-import {GET_SCREAMS_ERROR, LOADING_DATA, GET_SCREAMS_SUCCESS, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM, POST_SCREAM, GET_SCREAM_SUCCESS} from '../types'
+import {GET_SCREAMS_ERROR, LOADING_DATA, GET_SCREAMS_SUCCESS, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM, POST_SCREAM, GET_SCREAM_SUCCESS, SUBMIT_COMMENT} from '../types'
 
 const initialState = {
     loading: false,
@@ -40,6 +40,8 @@ export default function(state = initialState, action){
         case POST_SCREAM:
             return {...state, screams: [action.payload, ...state.screams]}
         
+        case SUBMIT_COMMENT:
+            return {...state, scream: {...state.scream, comments: [action.payload, ...state.scream.comments]}}
         
         default:
             return state

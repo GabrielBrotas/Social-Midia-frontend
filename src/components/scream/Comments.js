@@ -65,7 +65,7 @@ class Comments extends Component {
                                     </Grid>
                                 </Grid>
                             </Grid>
-                            <hr className={classes.visibleSeparator} />
+
 
                         </Fragment>
                     )
