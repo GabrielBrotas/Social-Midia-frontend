@@ -21,6 +21,7 @@ import createTheme from '@material-ui/core/styles/createMuiTheme'
 import home from './pages/home'
 import login from './pages/login'
 import signup from './pages/signup'
+import user from './pages/user'
 
 // * components
 import Navbar from './components/layout/Navbar'
@@ -70,6 +71,7 @@ function App() {
           <AuthRoute exact path="/signup" component={signup} />
           <AuthRoute exact path="/login" component={login} />
           <Route exact path="/" component={home}  />
+          {/* <Route exact path="/users/:handle" component={user} /> */}
         </Switch>
 
         </div>

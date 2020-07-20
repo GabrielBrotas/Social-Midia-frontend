@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import withStyles from '@material-ui/core/styles/withStyles'
 
@@ -18,68 +18,61 @@ const styles = theme => ({
     }
 })
 
-class CommentForm extends Component {
-    
-    state = {
-        body: '',
-        errors: {}
-    }
+function CommentForm(props) {
 
-    UNSAFE_componentWillReceiveProps(nextProps){
-        if(nextProps.UI.errors){
-            this.setState({errors: nextProps.UI.errors})
-        }
-        if(!nextProps.UI.errors && !nextProps.UI.loading){
-            this.setState({body: ''})
-        }
-    }
-    
-    handleChange = (event) => {
-        this.setState({ [event.target.name]: event.target.value})
-    }
+    const [body, setBody] = useState('')
+    const [errors, setErrors] = useState({})
 
-    handleSubmit = (event) => {
+    const {classes, authenticated} = props
+
+    useEffect( () => {
+        if(props.UI.errors){
+            setErrors(
+                props.UI.errors
+            )
+        }
+        if(!props.UI.errors && !props.UI.loading){
+            setBody('')
+        }
+    }, [props])
+
+    const handleSubmit = (event) => {
         event.preventDefault()
-        this.props.submitComment(this.props.screamId, {body: this.state.body})
+        props.submitComment(props.screamId, {body})
     }
 
-    render() {
-        const {classes, authenticated} = this.props
-        const errors = this.state.errors
+    const commentFormMarkup = authenticated
+    ? (
+        <Grid item sm={12}>
 
-        const commentFormMarkup = authenticated
-        ? (
+            <div className={classes.commentForm}>
+
+                <form onSubmit={handleSubmit}>
+                    <TextField
+                        name="body"
+                        type="text"
+                        label="Comment something"
+                        error={errors.comment ? true : false}
+                        helperText={errors.comment}
+                        value={body}
+                        onChange={e => setBody(e.target.value)}
+                        fullWidth
+                        className={classes.textField}
+                    />
+                    
+                    <Button type="submit" variant="contained" color="primary" className={classes.button}>
+                        Submit
+                    </Button>
+                </form>
+            </div>
             
-            <Grid item sm={12}>
-
-                <div className={classes.commentForm}>
-
-                    <form onSubmit={this.handleSubmit}>
-                        <TextField
-                            name="body"
-                            type="text"
-                            label="Comment something"
-                            error={errors.comment ? true : false}
-                            helperText={errors.comment}
-                            value={this.state.body}
-                            onChange={this.handleChange}
-                            fullWidth
-                            className={classes.textField}
-                        />
-                        
-                        <Button type="submit" variant="contained" color="primary" className={classes.button}>
-                            Submit
-                        </Button>
-                    </form>
-                </div>
-                
-            </Grid>
-        )
-        : null
+        </Grid>
+    )
+    : null
 
 
-        return commentFormMarkup
-    }
+    return commentFormMarkup
+    
 }
 
 CommentForm.protoTypes = {
