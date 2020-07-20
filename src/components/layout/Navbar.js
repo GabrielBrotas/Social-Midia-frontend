@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react'
 import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import MyButton from '../utils/MyButton'
-import PostScream from './PostScream'
+import MyButton from '../../utils/MyButton'
+import PostScream from '../scream/PostScream'
 // npm install --save @material-ui/core
 // Material UI stuffs, vamos importar os componentes um por vez para nao pesar a aplicação tendo que pegar tudo.
 import AppBar from '@material-ui/core/AppBar'

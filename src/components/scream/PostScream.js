@@ -2,11 +2,11 @@ import React, {Fragment, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import withStyles from '@material-ui/core/styles/withStyles'
 
-import MyButton from '../utils/MyButton'
+import MyButton from '../../utils/MyButton'
 
 // redux
 import {connect} from 'react-redux'
-import {postScream, clearErrors} from '../redux/actions/dataActions'
+import {postScream, clearErrors} from '../../redux/actions/dataActions'
 
 // Material UI Stuffs
 import Button from '@material-ui/core/Button'

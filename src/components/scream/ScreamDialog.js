@@ -3,8 +3,9 @@ import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import withStyles from '@material-ui/core/styles/withStyles'
 import dayjs from 'dayjs'
-import MyButton from '../utils/MyButton'
+import MyButton from '../../utils/MyButton'
 import LikeButton from './LikeButton'
+import Comments from './Comments'
 
 // MUI Stuffs
 import Dialog from '@material-ui/core/Dialog'
@@ -20,13 +21,9 @@ import ChatIcon from '@material-ui/icons/Chat'
 
 // redux
 import {connect} from 'react-redux'
-import {getScream} from '../redux/actions/dataActions'
+import {getScream} from '../../redux/actions/dataActions'
 
 const styles = {
-    invisibleSeparator: {
-        border: "none",
-        margin: 4
-    },
     profileImage: {
         maxWidth: 200,
         height: 200,
@@ -66,7 +63,7 @@ class ScreamDialog extends Component {
         this.setState({open: false})
     }
     render() {
-        const {classes, scream: {screamId, body, createdAt, likeCount, commentCount, userHandle, userImage}, UI: {loading}} = this.props
+        const {classes, scream: {screamId, body, createdAt, likeCount, commentCount, userHandle, userImage, comments}, UI: {loading}} = this.props
     
 
         const dialogMarkup = loading
@@ -107,6 +104,8 @@ class ScreamDialog extends Component {
                 <span>{commentCount} comments</span>
 
             </Grid>
+            <hr className={classes.visibleSeparator} />
+            <Comments comments={comments} />
         </Grid>
         )
         

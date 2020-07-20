@@ -1,4 +1,4 @@
-import {SET_ERRORS, SET_USER, CLEAR_ERRORS, LOADING_UI, SET_AUTHENTICATED, SET_UNAUTHENTICATED, LOADING_USER, LIKE_SCREAM, UNLIKE_SCREAM} from '../types'
+import { SET_USER, SET_AUTHENTICATED, SET_UNAUTHENTICATED, LOADING_USER, LIKE_SCREAM, UNLIKE_SCREAM} from '../types'
 
 
 const initialState = {
@@ -23,6 +23,7 @@ export default function(state = initialState, action){
                 loading: false,
                 ...action.payload
             }
+
         case LOADING_USER:
             return {
                 ...state, loading: true

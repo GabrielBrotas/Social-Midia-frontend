@@ -28,10 +28,9 @@ import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 // pegar o theme global
-const styles = (theme) => (
-    {...theme.userStyles}
-)
-
+const styles = (theme) => ({
+    ...theme.allRest
+})
 
 function Signup(props) {
 

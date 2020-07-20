@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import DeleteScream from './DeleteScream'
 import ScreamDialog from './ScreamDialog'
 import LikeButton from './LikeButton'
-import MyButton from '../utils/MyButton'
+import MyButton from '../../utils/MyButton'
 // MUI stuff
 import withStyles from '@material-ui/core/styles/withStyles'
 import Card from '@material-ui/core/card'

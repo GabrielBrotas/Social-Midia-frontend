@@ -16,6 +16,7 @@ export const loginUser = (userData, history) => (dispatch) => {
         history.push('/')
     })
     .catch( err => {
+
         console.log(err)
         dispatch({
             type: SET_ERRORS,
@@ -32,7 +33,6 @@ export const signupUser = (newUserData, history) => (dispatch) => {
     // fazer requisição para logar o user
     axios.post('/signup', newUserData)
     .then( async res => {
-        console.log(res.data)
         await setAuthorizationHeader(res.data.userToken.i)
         dispatch(getUserData());
         dispatch({type: CLEAR_ERRORS})
@@ -79,12 +79,14 @@ export const editUserDetails = (userDetails) => (dispatch) => {
 export const getUserData = () => (dispatch) => {
 
     dispatch({type: LOADING_USER})
-   
+    console.log('2')
     axios.get('/user')
         .then( res => {
+            console.log('ok')
             dispatch({type: SET_USER, payload: res.data})
         })
         .catch( err => {
+            console.log('no')
             console.log(err)
         })
 }
