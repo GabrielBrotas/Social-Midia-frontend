@@ -51,14 +51,38 @@ const styles = {
 class ScreamDialog extends Component {
     state = {
         open: false,
+        oldPath: '',
+        newPath: ''
+    }
+    
+    // check open dialog
+    componentDidMount(){
+        if(this.props.openDialog){
+            this.handleOpen();
+        }
     }
 
     handleOpen = () => {
-        this.setState({open: true})
+
+        // curl atual
+        let oldPath = window.location.pathname
+        // dados do user e da scream
+        const {userHandle, screamId} = this.props
+        // new path, onde vai redirecionar o user para a pagina do autor da scream
+        const newPath = `/users/${userHandle}/scream/${screamId}`
+
+        if(oldPath === newPath) oldPath = `/users/${userHandle}`
+
+        // quando abrir o dialog mudar a url
+        window.history.pushState(null, null, newPath)
+
+        this.setState({open: true, oldPath, newPath})
         this.props.getScream(this.props.screamId)
     }
 
     handleClose = () => {
+        // retornar para a pagina que estava quando fechar o dialog
+        window.history.pushState(null, null, this.state.oldPath)
         this.setState({open: false})
         this.props.clearErrors()
     }

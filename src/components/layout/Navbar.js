@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import MyButton from '../../utils/MyButton'
 import PostScream from '../scream/PostScream'
+import Notifications from './Notifications'
 // npm install --save @material-ui/core
 // Material UI stuffs, vamos importar os componentes um por vez para nao pesar a aplicação tendo que pegar tudo.
 import AppBar from '@material-ui/core/AppBar'
@@ -12,7 +13,7 @@ import Button from '@material-ui/core/Button'
 
 // Icons
 import HomeIcon from '@material-ui/icons/Home'
-import Notifications from '@material-ui/icons/Notifications'
+
 
 class Navbar extends Component {
     render() {
@@ -25,12 +26,14 @@ class Navbar extends Component {
                         <Fragment>
 
                             <PostScream />
+                            
+                            <Link to="/">
+                                <MyButton tip="Home">                                
+                                    <HomeIcon />                                
+                                </MyButton>
+                            </Link>
 
-                            <MyButton tip="Home">
-                                <Link to="/">
-                                    <HomeIcon />
-                                </Link>
-                            </MyButton>
+                            <Notifications />
 
                             <MyButton tip="Notifications">
                                 <Notifications />

@@ -36,7 +36,7 @@ const styles = {
 
 function Scream(props) {
 
-
+    
     const {classes, scream: {body, createdAt, userImage, userHandle, likeCount, commentCount, screamId}} = props
 
     dayjs.extend(relativeTime)
@@ -89,7 +89,7 @@ function Scream(props) {
                 </MyButton>
                 <span>{commentCount} comments</span>
 
-                <ScreamDialog screamId={screamId} userHandle={userHandle} likes={props.likes}/>
+                <ScreamDialog screamId={screamId} userHandle={userHandle} likes={props.likes} openDialog={props.openDialog}/>
             </CardContent>
 
         </Card>
@@ -100,7 +100,8 @@ function Scream(props) {
 Scream.protoTypes = {
     scream: PropTypes.object.isRequired,
     classes: PropTypes.object.isRequired,
-    likes: PropTypes.object.isRequired
+    likes: PropTypes.object.isRequired,
+    openDialog: PropTypes.bool
 }
 
 
