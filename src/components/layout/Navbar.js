@@ -33,6 +33,7 @@ class Navbar extends Component {
                                 </MyButton>
                             </Link>
 
+                            
                             <Notifications />
                       
                         </Fragment>
