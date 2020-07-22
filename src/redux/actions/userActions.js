@@ -1,4 +1,4 @@
-import {SET_ERRORS, SET_USER, CLEAR_ERRORS, LOADING_UI, SET_UNAUTHENTICATED, LOADING_USER} from '../types'
+import {SET_ERRORS, SET_USER, CLEAR_ERRORS, LOADING_UI, SET_UNAUTHENTICATED, LOADING_USER, MARK_NOTIFICATIONS_READ} from '../types'
 import axios from 'axios'
 
 export const loginUser = (userData, history) => (dispatch) => {
@@ -76,6 +76,14 @@ export const editUserDetails = (userDetails) => (dispatch) => {
         .catch( err=> console.log(err))
 }
 
+export const markNotificationsRead = (notificationIds) => (dispatch) => {
+    axios.post('notifications', notificationIds)
+        .then( res => {
+            dispatch({type: MARK_NOTIFICATIONS_READ})
+        })
+        .catch( err => console.log(err))
+}
+
 export const getUserData = () => (dispatch) => {
 
     dispatch({type: LOADING_USER})
@@ -96,4 +104,6 @@ const setAuthorizationHeader = (token) => {
     // sempre que fizer uma requisição via axios vai ter essa header com o token do usuario
     axios.defaults.headers.common['Authorization'] = FBIdToken 
 }
+
+
 
