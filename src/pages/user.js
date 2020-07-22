@@ -4,6 +4,8 @@ import axios from 'axios'
 import Scream from '../components/scream/Scream'
 import Grid from '@material-ui/core/Grid'
 import StaticProfile from '../components/profile/StaticProfile'
+
+import ProfileSkeleton from '../utils/ProfileSkeleton'
 // redux
 import {connect} from 'react-redux'
 import {getUserData} from '../redux/actions/dataActions'
@@ -61,7 +63,7 @@ export class user extends Component {
                 <Grid item sm={4} xs={12}>
                     {
                     this.state.profile === null 
-                        ?   <p>loading profile...</p>
+                        ?   <ProfileSkeleton />
                         :   <StaticProfile profile={this.state.profile} />
                     }
                 </Grid>

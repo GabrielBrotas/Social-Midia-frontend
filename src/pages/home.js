@@ -12,11 +12,11 @@ import {getScreams} from '../redux/actions/dataActions'
 // componente da scream
 import Scream from '../components/scream/Scream'
 import Profile from '../components/profile/Profile'
-
+import ScreamSkeleton from '../utils/ScreamSkeleton'
 
 function Home(props) {
     const screamsList = useSelector( state => state.data)
-    const {screams} = screamsList
+    const {screams, loading} = screamsList
 
     const userInfo = useSelector( state => state.user)
     const {likes, authenticated, credentials: {handle}} = userInfo
@@ -30,12 +30,14 @@ function Home(props) {
     }, [dispatch])
 
     useEffect( () => {
-        screams && 
+        !loading ?
         setRecentScreamsMarkup(
             screams.map( (scream) => (
                 <Scream key={scream.screamId} scream={scream} likes={likes} authenticated={authenticated} handle={handle}/>
             )))
-    }, [screamsList, likes, screams, authenticated, handle])
+            : setRecentScreamsMarkup(<ScreamSkeleton />)
+            
+    }, [screamsList, likes, screams, authenticated, handle, loading])
     // colocar todas as screams, quando forem carregadas, no formato padrao do component 'Scream'
  
     
@@ -45,9 +47,7 @@ function Home(props) {
             
             {/* coluna das screams */}
             <Grid item sm={8} xs={12}>
-                {recentScreamsMarkup 
-                ? recentScreamsMarkup 
-                : <p>Loading...</p>}
+               { recentScreamsMarkup }
             </Grid>
 
             {/* coluna do perfil do usuario */}
