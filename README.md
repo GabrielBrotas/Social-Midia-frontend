@@ -9,11 +9,17 @@
   @material-ui/icons
   
   axios
+  
   dayjs
+  
   jwt-decode
+  
   react-router-dom
+  
   redux
+  
   react-redux
+  
   redux-thunk
   
 ## Photos
